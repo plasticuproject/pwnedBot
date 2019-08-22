@@ -6,7 +6,7 @@ at risk due to an online account of theirs having been compromised or
 'pwned' in a data breach.
 
 All data is sourced from https://haveibeenpwned.com
-Visit https://haveibeenpwned.com/API/v2 to read the Acceptable Use Policy
+Visit https://haveibeenpwned.com/API/v3 to read the Acceptable Use Policy
 for rules regarding acceptable usage of this API.
 
 Copyright (C) 2018  plasticuproject@pm.me
@@ -30,6 +30,10 @@ import os
 
 pwned = hibpwned.Pwned
 bot = commands.Bot(command_prefix="!")
+
+# Making calls to the HIBP API requires a key
+# insert your API Key here
+apiKey = "<...>"
 
 # bot/app name to pass as user-agent to API
 # insert a unique identifier name here
@@ -70,7 +74,7 @@ async def password(ctx, *args):
     # searches breach database for given password
     try:
         paswd = ' '.join(args)
-        breachNum = pwned(defAccount, appName).searchPassword(paswd)
+        breachNum = pwned(defAccount, appName, apiKey).searchPassword(paswd)
         if int(breachNum) > 0:
             result = f"Your password has been compromized. It was found {breachNum} times in the database."
             await ctx.send(file = discord.File("images/warning-sign.png"))
@@ -92,7 +96,7 @@ async def search(ctx, email):
     # searches breach database for given account
     try:
         domainList = []
-        result = pwned(email, appName).searchAllBreaches()
+        result = pwned(email, appName, apiKey).searchAllBreaches()
         breachNum = len(result)
         mod = breachNum % 20
         numTxt = f"Your account was found in {breachNum} database breaches.\nThose breaches are:"
@@ -128,7 +132,7 @@ async def breaches(ctx):
 
     # list the names of all breaches in the database
     try:
-        result = pwned(defAccount, appName).allBreaches()
+        result = pwned(defAccount, appName, apiKey).allBreaches()
         breachNum = len(result)
         numTxt = f"There are {breachNum} breached sites in the database."
         await ctx.send(numTxt)
@@ -154,7 +158,7 @@ async def breach_name(ctx, siteName):
 
     # search breach database by name and list all details for breach
     try:
-        result = pwned(defAccount, appName).singleBreach(name=siteName)
+        result = pwned(defAccount, appName, apiKey).singleBreach(name=siteName)
         embed = discord.Embed()
         link = []
         imgName = ''
@@ -206,7 +210,7 @@ async def pastes(ctx, email):
 
     # search paste database for all pastes containing given account
     try:
-        result = pwned(email, appName).searchPastes()
+        result = pwned(email, appName, apiKey).searchPastes()
         breachNum = len(result)
         mod = breachNum % 20
         numTxt = f"Your account was found in {breachNum} pastes."
@@ -243,7 +247,7 @@ async def paste_id(ctx, email, ID):
 
     # search paste database by ID and list all details for paste
     try:
-        result = pwned(email, appName).searchPastes()
+        result = pwned(email, appName, apiKey).searchPastes()
         breachNum = len(result)
         embed = discord.Embed(title = ID)
         for data in result:

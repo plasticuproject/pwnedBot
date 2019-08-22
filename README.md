@@ -17,6 +17,9 @@ Head over to [Discord](https://discordapp.com/developers/applications/me "Discor
 Record your *Client_ID*. On the left, click *Bot*, and then *Add Bot*. <br />
 Once you are done setting up your bot, record the *Token* and *Client Secret*. <br />
 
+Making calls to the HIBP API requires a key. You can purchase an HIBP-API-Key at
+https://haveibeenpwned.com/API/Key <br />
+
 In pwned_bot.py replace all <...> with appropriate information. <br />
 
 To start bot, run:
