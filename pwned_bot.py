@@ -311,7 +311,7 @@ async def help(ctx):
     embed.add_field(name="!pastes", 
         value="(*email_address*) Search database for any pastes containing the provided email address.", inline=False)
     embed.add_field(name="!paste_id", 
-        value="(*email_address paste_id*) Will return details of a paste containg your email address. ", inline=False)
+        value="(*email_address paste_id*) Will return details of a paste containing your email address. ", inline=False)
     embed.add_field(name="!info", 
         value="Gives a info about this bot.", inline=False)
     embed.add_field(name="!help", 

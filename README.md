@@ -41,7 +41,7 @@ When bot is active in server type "!help" for a list of commands.
 
 ## License
 All data sourced from https://haveibeenpwned.com <br />
-Visit https://haveibeenpwned.com/API/v2 to read the Acceptable Use Policy <br />
+Visit https://haveibeenpwned.com/API/v3 to read the Acceptable Use Policy <br />
 for rules regarding acceptable usage of this API. <br />
 
 This work is licensed under a [Creative Commons Attribution 4.0 International License.](https://creativecommons.org/licenses/by/4.0/) <br />
