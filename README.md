@@ -9,7 +9,7 @@ at risk due to an online account of theirs having been compromised or <br />
 Python 3.6+, pip, and Curl
 ```
 pip install -r requirements.txt
-pip install -U https://github.com/Rapptz/discord.py/archive/rewrite.zip
+pip install -U discord.py
 ```
 
 ## Installation
