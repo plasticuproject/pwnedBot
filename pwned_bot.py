@@ -29,7 +29,7 @@ import os
 
 
 pwned = hibpwned.Pwned
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="%!")
 
 # Making calls to the HIBP API requires a key
 # insert your API Key here
@@ -76,10 +76,10 @@ async def password(ctx, *args):
         paswd = ' '.join(args)
         breachNum = pwned(defAccount, appName, apiKey).searchPassword(paswd)
         if int(breachNum) > 0:
-            result = f"Your password has been compromized. It was found {breachNum} times in the database."
+            result = f"Your password has been compromised. It was found {breachNum} times in the database."
             await ctx.send(file = discord.File("images/warning-sign.png"))
         elif int(breachNum) == 0:
-            result = "Your password has not been compromized."
+            result = "Your password has not been compromised."
         else:
             result = "ERROR: Something went wrong."
         await ctx.send(result)
@@ -303,7 +303,7 @@ async def help(ctx):
     embed.add_field(name="!password", 
         value="(*password*) Search database for any instances of your password. Returns the number of times your password is found.", inline=False)
     embed.add_field(name="!search", 
-        value="(*account_name*) Searches database for breaches containing the provided account name. You may provode a username or email address.", inline=False)
+        value="(*account_name*) Searches database for breaches containing the provided account name. You may provide a username or email address.", inline=False)
     embed.add_field(name="!breaches", 
       value="Displays names of all breaches in the database.", inline=False)
     embed.add_field(name="!breach_name", 
