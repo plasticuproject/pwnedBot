@@ -29,7 +29,7 @@ import os
 
 
 pwned = hibpwned.Pwned
-bot = commands.Bot(command_prefix="%!")
+bot = commands.Bot(command_prefix="!")
 
 # Making calls to the HIBP API requires a key
 # insert your API Key here
