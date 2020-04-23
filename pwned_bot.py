@@ -28,20 +28,29 @@ import re
 import os
 
 
-pwned = hibpwned.Pwned
-bot = commands.Bot(command_prefix="!")
-
 # Making calls to the HIBP API requires a key
 # insert your API Key here
-apiKey = "<...>"
+apiKey = os.environ['HIBP_API_KEY']
 
 # bot/app name to pass as user-agent to API
 # insert a unique identifier name here
-appName = "<...>"
+appName = os.environ['APP_NAME']
 
 # Pwned requires an account argument but the API doesn't need one for
 # certain functions. This is a placeholder account to send to the API
 defAccount = "test@example.com"
+
+# Discord Bot Token variable
+token = os.environ['DISCORD_TOKEN']
+
+# Discord Client ID
+clientID = os.environ['DISCORD_CLIENT_ID']
+
+# Bot command prefix
+prefix = os.environ['BOT_PREFIX']
+
+pwned = hibpwned.Pwned
+bot = commands.Bot(command_prefix=prefix)
 
 
 def split_search(embed, domainList, minNum, maxNum):
@@ -182,6 +191,7 @@ async def breach_name(ctx, siteName):
             link = re.findall('(https?.*?)"', result["Description"])
         except:
             pass
+
         result["Description"] = cleanhtml(result["Description"])
         result["Description"] = result["Description"].replace('&quot;', '"')
         for key, value in result.items():
@@ -190,6 +200,7 @@ async def breach_name(ctx, siteName):
             if key != "LogoPath":
                 embed.add_field(name=f"{key}", value=f"{value}")
         await ctx.send(embed=embed)
+
         if len(link) > 0:
             await ctx.send("Breach Related Articles and Links:")
             for i in link:
@@ -281,7 +292,7 @@ async def info(ctx):
 
     # insert your client id number here
     embed.add_field(
-        name="Invite", value="https://discordapp.com/oauth2/authorize?client_id=<...>&scope=bot")
+        name="Invite", value=f"https://discordapp.com/oauth2/authorize?client_id={clientID}&scope=bot")
     await ctx.send(embed=embed)
 
 
@@ -300,25 +311,25 @@ async def help(ctx):
     embed = discord.Embed(title="Hibpwned", description=desc, color=0xEEE657)
 
     # commands
-    embed.add_field(name="!password", 
+    embed.add_field(name=f"{prefix}password", 
         value="(*password*) Search database for any instances of your password. Returns the number of times your password is found.", inline=False)
-    embed.add_field(name="!search", 
+    embed.add_field(name=f"{prefix}search", 
         value="(*account_name*) Searches database for breaches containing the provided account name. You may provide a username or email address.", inline=False)
-    embed.add_field(name="!breaches", 
+    embed.add_field(name=f"{prefix}breaches", 
       value="Displays names of all breaches in the database.", inline=False)
-    embed.add_field(name="!breach_name", 
+    embed.add_field(name=f"{print}breach_name", 
         value="(*name*) Displays the details of a single breach.", inline=False)
-    embed.add_field(name="!pastes", 
+    embed.add_field(name=f"{prefix}pastes", 
         value="(*email_address*) Search database for any pastes containing the provided email address.", inline=False)
-    embed.add_field(name="!paste_id", 
+    embed.add_field(name=f"{prefix}paste_id", 
         value="(*email_address paste_id*) Will return details of a paste containing your email address. ", inline=False)
-    embed.add_field(name="!info", 
+    embed.add_field(name=f"{prefix}info", 
         value="Gives a info about this bot.", inline=False)
-    embed.add_field(name="!help", 
+    embed.add_field(name=f"{prefix}help", 
         value="Gives this message.", inline=False)
     await ctx.send(embed=embed)
 
 
 # insert your bot TOKEN here
-bot.run("<...>")
+bot.run(token)
 
