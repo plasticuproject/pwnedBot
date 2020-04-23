@@ -18,7 +18,9 @@ If [git](https://git-scm.com/downloads "git") is not already installed on your h
 
 ## Heroku Deployment
 Create a fork of this repository, then clone it to your local host with the `git clone` command. <br />
-Navigate into the project's root directory and run `heroku create`. <br />
+Navigate into the project's root directory and run `heroku create`. Take note of the name it assigns the app. <br />
+Run `heroku git:remote -a <app name>` to add a remote to your local repository. <br />
+
 Set the environment variables that the application will use with the `heroku config:set` command, setting the following variables:
 ```
 heroku config:set HIBP_API_KEY=<your HIBP-API-KEY>
@@ -28,6 +30,7 @@ heroku config:set DISCORD_CLIENT_ID=<your discord CLIENT_ID>
 heroku config:set BOT_PREFIX=<a prefix for your bot commands>
 ```
 To deploy, push the code to your Heroku account with the command `git push heroku master` <br />
+To start the bot, issue the command `heroku ps:scale worker=1` <br />
 
 
 ## Development
@@ -40,7 +43,8 @@ To deploy, push the code to your Heroku account with the command `git push herok
     - discord.py >= 1.3.3
 
 Follow the steps above to deploy your application. <br />
-Log into your **Heroku** account, choose your **app**, and under **Deploy** click **Connect to Github** and follow the directions to link your project. <br />
+Log into your **Heroku** account, choose your **app**, and under **Deploy** click **Connect to Github** and follow the <br />
+directions to link your account, choose the repository, and set up automatic deployment on the master branch. <br />
 Now when you push changes to your Github project, they will automatically be deployed on your Heroku container. <br />
 
 
