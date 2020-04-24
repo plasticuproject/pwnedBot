@@ -13,8 +13,8 @@ Once you are done setting up your bot, save your *Client_ID*, *Token*, and *Clie
 Making calls to the haveibeenpwned API requires a key. You can purchase a HIBP-API-KEY
 [here](https://haveibeenpwned.com/API/Key "HIBP-API-KEY"). <br />
 
-Create a [Heroku](https://heroku.com "Heroku") account and install the [Heroku CLI Tool](https://devcenter.heroku.com/articles/heroku-cli#download-and-install "Heroku CLI Tool"). Follow the directions and to log into your account to authenticate. <br />
-If [git](https://git-scm.com/downloads "git") is not already installed on your host, install it. <br />
+Create a [Heroku](https://heroku.com "Heroku") account and install the [Heroku CLI Tool](https://devcenter.heroku.com/articles/heroku-cli#download-and-install "Heroku CLI Tool"). Follow the directions and run the command `heroku login -i` to authenticate your account. <br />
+If [git](https://git-scm.com/downloads "git") is not already installed on your local host, install it. <br />
 
 ## Heroku Deployment
 Create a fork of this repository, then clone it to your local host with the `git clone` command. <br />

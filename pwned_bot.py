@@ -317,7 +317,7 @@ async def help(ctx):
         value="(*account_name*) Searches database for breaches containing the provided account name. You may provide a username or email address.", inline=False)
     embed.add_field(name=f"{prefix}breaches", 
       value="Displays names of all breaches in the database.", inline=False)
-    embed.add_field(name=f"{print}breach_name", 
+    embed.add_field(name=f"{prefix}breach_name", 
         value="(*name*) Displays the details of a single breach.", inline=False)
     embed.add_field(name=f"{prefix}pastes", 
         value="(*email_address*) Search database for any pastes containing the provided email address.", inline=False)
