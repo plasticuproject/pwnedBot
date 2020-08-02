@@ -1,5 +1,5 @@
 # pwnedBot
-A Heroku hosted Discord bot implementation of Troy Hunt's haveibeenpwned.com service,  <br />
+A Heroku hosted Discord bot implementation of Troy Hunt's haveibeenpwned.com service, <br />
 a free resource for anyone to quickly assess if they may have been put <br />
 at risk due to an online account of their's having been compromised or <br />
 "pwned" in a data breach, using the hibpwned python library. <br />
