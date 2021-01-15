@@ -189,13 +189,13 @@ async def breach_name(ctx, siteName):
 
         try:
             link = re.findall('(https?.*?)"', result["Description"])
-        except:
+        except (KeyError, NameError, TypeError):
             pass
 
         result["Description"] = cleanhtml(result["Description"])
         result["Description"] = result["Description"].replace('&quot;', '"')
         for key, value in result.items():
-            if value == None or value == "":
+            if value is None or value == "":
                 value = "None"
             if key != "LogoPath":
                 embed.add_field(name=f"{key}", value=f"{value}")
@@ -230,7 +230,7 @@ async def pastes(ctx, email):
         embed = discord.Embed()
         names = []
         for data in result:
-            if data["Title"] == None:
+            if data["Title"] is None:
                 data["Title"] = "No Title"
             names.append({data["Title"] : data["Id"]})
         for i in range(breachNum // 20):
@@ -259,7 +259,6 @@ async def paste_id(ctx, email, ID):
     # search paste database by ID and list all details for paste
     try:
         result = pwned(email, appName, apiKey).searchPastes()
-        breachNum = len(result)
         embed = discord.Embed(title = ID)
         for data in result:
             if data["Id"] == ID:
