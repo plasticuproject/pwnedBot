@@ -1,5 +1,5 @@
 [![Python 3.7](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-370/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/plasticuproject/pwnedBot.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/plasticuproject/pwnedBot/context:python)
+[![CodeQL](https://github.com/plasticuproject/pwnedBot/actions/workflows/codeql.yml/badge.svg)](https://github.com/plasticuproject/pwnedBot/actions/workflows/codeql.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_pwnedBot&metric=alert_status)](https://sonarcloud.io/dashboard?id=plasticuproject_pwnedBot)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_pwnedBot&metric=security_rating)](https://sonarcloud.io/dashboard?id=plasticuproject_pwnedBot)
 # pwnedBot
