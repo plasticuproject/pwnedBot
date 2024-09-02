@@ -1,56 +1,83 @@
-[![Python 3.7](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-370/)
+[![build](https://github.com/plasticuproject/pwnedBot/actions/workflows/python-app.yml/badge.svg)](https://github.com/plasticuproject/pwnedBot/actions/workflows/python-app.yml)
+[![Python 3.11](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/release/python-311/)
 [![CodeQL](https://github.com/plasticuproject/pwnedBot/actions/workflows/codeql.yml/badge.svg)](https://github.com/plasticuproject/pwnedBot/actions/workflows/codeql.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_pwnedBot&metric=alert_status)](https://sonarcloud.io/dashboard?id=plasticuproject_pwnedBot)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=plasticuproject_pwnedBot&metric=security_rating)](https://sonarcloud.io/dashboard?id=plasticuproject_pwnedBot)
+
 # pwnedBot
-A Heroku hosted Discord bot implementation of Troy Hunt's haveibeenpwned.com service, <br />
-a free resource for anyone to quickly assess if they may have been put <br />
-at risk due to an online account of their's having been compromised or <br />
-"pwned" in a data breach, using the hibpwned python library. <br />
+pwnedBot is a Discord bot implementation of Troy Hunt's haveibeenpwned.com service, a free resource for anyone to quickly assess if they may have been put at risk due to an online account of theirs having been compromised or "pwned" in a data breach. This document outlines the steps required to build, run, and manage the bot using Docker.
 
+## Prerequisites
 
-## Prerequisites 
-Head over to [DiscordApp](https://discordapp.com/developers/applications/me "DiscordApp") and create a new app. <br />
-Record your *Client_ID*. On the left, click **Bot**, and then **Add Bot**. <br />
-Once you are done setting up your bot, save your *Client_ID*, *Token*, and *Client Secret* in a safe place. <br />
+Before proceeding, ensure you have Docker installed and running on your machine. You will also need Python installed if you plan to initialize the database manually before running the bot in a Docker container.
 
-Making calls to the haveibeenpwned API requires a key. You can purchase a HIBP-API-KEY
-[here](https://haveibeenpwned.com/API/Key "HIBP-API-KEY"). <br />
+## Building the Bot
 
-Create a [Heroku](https://heroku.com "Heroku") account and install the [Heroku CLI Tool](https://devcenter.heroku.com/articles/heroku-cli#download-and-install "Heroku CLI Tool"). Follow the directions and run the command `heroku login -i` to authenticate your account. <br />
-If [git](https://git-scm.com/downloads "git") is not already installed on your local host, install it. <br />
+To build the Docker image for PwnedBot, navigate to the directory containing the Dockerfile and run the following command:
 
-## Heroku Deployment
-Create a fork of this repository, then clone it to your local host with the `git clone` command. <br />
-Navigate into the project's root directory and run `heroku create`. Take note of the name it assigns the app. <br />
-Run `heroku git:remote -a <app name>` to add a remote to your local repository. <br />
+```sh
+docker build -t pwnedbot .
+``` 
 
-Set the environment variables that the application will use with the `heroku config:set` command, setting the following variables:
+This command builds a Docker image named `pwnedbot` based on the instructions in the `Dockerfile` located in the current directory.
+
+## Configuring Environment Variables
+
+Head over to [DiscordApp](https://discordapp.com/developers/applications/me "DiscordApp") and create a new app. Record your *Client_ID*. On the left, click **Bot**, and then **Add Bot**. Once you are done setting up your bot, save your *Client_ID*, *Token*, and *Client Secret* in a safe place.
+
+Making calls to the haveibeenpwned API requires a key. You can purchase a HIBP-API-KEY [here](https://haveibeenpwned.com/API/Key "HIBP-API-KEY").
+
+Create an `.env` file in the project root directory and add the required information:
+
 ```
-heroku config:set HIBP_API_KEY=<your HIBP-API-KEY>
-heroku config:set APP_NAME=<a unique app name for haveibeenpwned to recognize your app/bot>
-heroku config:set DISCORD_TOKEN=<your discord bot TOKEN>
-heroku config:set DISCORD_CLIENT_ID=<your discord CLIENT_ID>
-heroku config:set BOT_PREFIX=<a prefix for your bot commands>
+HIBP_API_KEY="test-key"
+APP_NAME="test-app"
+DISCORD_TOKEN=TOKEN
+DISCORD_CLIENT_ID=ID
+BOT_PREFIX="!"
+DEFAULT_ACCOUNT="test@example.com"
 ```
-To deploy, push the code to your Heroku account with the command `git push heroku master` <br />
-To start the bot, issue the command `heroku ps:scale worker=1` <br />
+
+Make sure to replace the default information with your actual values. 
+
+## Running the Bot
+
+To start the bot, use the following command to run the Docker container. This command also mounts the necessary directories and files into the container and redirects all output to `output.log`:
+
+```
+docker run -it --rm -v $(pwd)/.env:/home/bot/.env pwnedbot > output.log 2>&1
+``` 
+
+This will log all output from the bot to `output.log`, allowing you to review it later for debugging and monitoring purposes.
+
+## Running the bot in detached mode
+
+If you wish to run the bot container in detached mode and still record its output to a log file, you may do so with the folloing commands:
 
 
-## Development
-### Requirements
-- git >= 2.17.1
-- Python >= 3.6.9
-- python3-pip >= 20.0.2
-    - hibpwned >= 1.1.1
-    - Pillow >= 7.1.1
-    - discord.py >= 1.3.3
+Run the Docker container in detached mode:
 
-Follow the steps above to deploy your application. <br />
-Log into your **Heroku** account, choose your **app**, and under **Deploy** click **Connect to Github** and follow the <br />
-directions to link your account, choose the repository, and set up automatic deployment on the master branch. <br />
-Now when you push changes to your Github project, they will automatically be deployed on your Heroku container. <br />
+```sh
+PWNEDBOT_ID=$(docker run -d -it --rm -v $(pwd)/.env:/home/bot/.env pwnedbot)
+```
 
+Start logging to a file:
+
+```sh
+docker logs -f $PWNEDBOT_ID > output.log 2>&1 & PWNEDBOT_LOG_PID=$!
+```
+
+Stop the bot container:
+
+```sh
+docker stop $PWNEDBOT_ID
+```
+
+Kill the logging process if needed:
+
+```sh
+kill $PWNEDBOT_LOG_PID
+```
 
 ## Usage
 To add bot to server add your *Client_ID* to this URL and visit in browser:  <br />
@@ -72,3 +99,4 @@ for rules regarding acceptable usage of this API. <br />
 This work is licensed under a [Creative Commons Attribution 4.0 International License.](https://creativecommons.org/licenses/by/4.0/) <br />
 ![CCv4](https://haveibeenpwned.com/Content/Images/CreativeCommons.png) <br />
 plasticuproject
+

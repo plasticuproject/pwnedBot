@@ -1,0 +1,6 @@
+HIBP_API_KEY="test-key"
+APP_NAME="test-app"
+DISCORD_TOKEN=TOKEN
+DISCORD_CLIENT_ID=ID
+BOT_PREFIX="!"
+DEFAULT_ACCOUNT="test@example.com"
