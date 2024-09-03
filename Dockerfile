@@ -1,5 +1,6 @@
 FROM python:3.11-alpine
 
+RUN apk --no-cache add curl
 RUN adduser -D bot
 USER bot
 WORKDIR /home/bot

@@ -86,7 +86,8 @@ def split_search(embed: discord.Embed, domain_list: list[dict[str, str]],
         send_list.append(domain_list[i])
     for item in send_list:
         for k, v in item.items():
-            embed.add_field(name=k, value=v, inline=False)
+            embed.add_field(name=k, value=v, inline=True)
+        embed.add_field(name="\u200b", value="\u200b", inline=True)
 
 
 def cleanhtml(raw_html: str) -> str:
@@ -151,7 +152,12 @@ async def password(ctx: commands.Context[commands.Bot], *args: str) -> None:
         breach_num = pwned(default_account, app_name,
                            api_key).search_password(paswd)
 
-        if int(breach_num) > 0:
+        if int(breach_num) == 429:
+            result = ("Your password has either been compromised and "
+                      "found 429 time in the database, or "
+                      "this request is rate limited. I am too lazy "
+                      "to fix this to tell the difference.")
+        if int(breach_num) > 0 and int(breach_num) != 429:
             result = ("Your password has been compromised. "
                       f"It was found {breach_num} times in the database.")
             await ctx.send(file=discord.File("images/warning-sign.png"))
@@ -193,12 +199,16 @@ async def search(ctx: commands.Context[commands.Bot], *args: str) -> None:
         domain_list: list[dict[str, str]] = []
         result = pwned(email, app_name, api_key).search_all_breaches()
 
-        if isinstance(result, list):
+        if isinstance(result, list) and result:
             breach_num = len(result)
+        elif isinstance(result, int) and result == 429:
+            error = "Rate limit exceeded. Wait a few minutes."
+            await ctx.send(error)
+            raise RequestException
         else:
             raise TypeError
 
-        mod = breach_num % 20
+        mod = breach_num % 5
         num_txt = (f"Your account was found in {breach_num} "
                    "database breaches.\nThose breaches are:")
         await ctx.send(file=discord.File("images/warning-sign.png"))
@@ -215,10 +225,10 @@ async def search(ctx: commands.Context[commands.Bot], *args: str) -> None:
                     name_value, (str, int)) else "Unknown"
                 domain_list.append({"Name": name, "Domain": domain})
 
-        for i in range(breach_num // 20):
-            if i * 20 < breach_num:
+        for i in range(breach_num // 5):
+            if i * 5 < breach_num:
                 embed = discord.Embed()
-                split_search(embed, domain_list, i * 20, (i * 20) + 20)
+                split_search(embed, domain_list, i * 5, (i * 5) + 5)
                 await ctx.send(embed=embed)
 
         if mod > 0:
@@ -260,6 +270,10 @@ async def breaches(ctx: commands.Context[commands.Bot]) -> None:
 
         if isinstance(result, list):
             breach_num = len(result)
+        elif isinstance(result, int) and result == 429:
+            error = "Rate limit exceeded. Wait a few minutes."
+            await ctx.send(error)
+            raise RequestException
         else:
             raise RequestException
 
@@ -314,8 +328,12 @@ async def breach_name(ctx: commands.Context[commands.Bot], *args: str) -> None:
         result_list = pwned(default_account, app_name,
                             api_key).single_breach(name=site_name)
 
-        if isinstance(result_list, list):
+        if isinstance(result_list, list) and result_list:
             result = result_list[0]
+        elif isinstance(result_list, int) and result_list == 429:
+            error = "Rate limit exceeded. Wait a few minutes."
+            await ctx.send(error)
+            raise RequestException
         else:
             raise TypeError
 
@@ -399,12 +417,16 @@ async def pastes(ctx: commands.Context[commands.Bot], *args: str) -> None:
         email = args[0]
         result = pwned(email, app_name, api_key).search_pastes()
 
-        if isinstance(result, list):
+        if isinstance(result, list) and result:
             breach_num = len(result)
+        elif isinstance(result, int) and result == 429:
+            error = "Rate limit exceeded. Wait a few minutes."
+            await ctx.send(error)
+            raise RequestException
         else:
             raise TypeError
 
-        mod = breach_num % 20
+        mod = breach_num % 5
         num_txt = f"Your account was found in {breach_num} pastes."
         await ctx.send(file=discord.File("images/warning-sign.png"))
         await ctx.send(num_txt)
@@ -416,14 +438,14 @@ async def pastes(ctx: commands.Context[commands.Bot], *args: str) -> None:
             if title is None:
                 title = "No Title"
 
-            paste_id_value: str | int | bool = data.get("ID", "Unknown")
+            paste_id_value: str | int | bool = data.get("Id", "Unknown")
             paste_id_str = str(paste_id_value)
             title_str = str(title)
-            names.append({"Title": title_str, "ID": paste_id_str})
+            names.append({"Title": title_str, "Id": paste_id_str})
 
-        for i in range(breach_num // 20):
-            if i * 20 < breach_num:
-                split_search(embed, names, i * 20, (i * 20) + 20)
+        for i in range(breach_num // 5):
+            if i * 5 < breach_num:
+                split_search(embed, names, i * 5, (i * 5) + 5)
                 await ctx.send(embed=embed)
 
         if mod > 0:
@@ -476,6 +498,12 @@ async def paste_id(ctx: commands.Context[commands.Bot], *args: str) -> None:
                 if data["Id"] == i_d:
                     for key, value in data.items():
                         embed.add_field(name=key, value=value, inline=False)
+        elif isinstance(result, int) and result == 429:
+            error = "Rate limit exceeded. Wait a few minutes."
+            await ctx.send(error)
+            raise RequestException
+        else:
+            raise TypeError
 
         await ctx.send(embed=embed)
         await ctx.send("*All data sourced from https://haveibeenpwned.com*")
